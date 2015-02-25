@@ -65,10 +65,10 @@ public class Graph {
 	}// 返回顶点v的所有相邻顶点
 
 	public static int degree(Graph G, int v) {
-		int degree = 0;
-		for (int w : G.getPoint(v))
-			degree++;
-		return degree;
+//		int degree = 0;
+//		for (int w : G.getPoint(v))
+//			degree++;
+		return G.getPoint(v).size();
 	}// 计算v的度数
 
 	public static int maxDrgree(Graph G) {
