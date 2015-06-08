@@ -36,7 +36,7 @@ public class Graph {
 	Graph(int V) {
 		this.V = V;
 		this.E = 0;
-		adj = (Bag[]) new Bag[V];
+		adj = new Bag[V];
 		for (int v = 0; v < V; v++)
 			adj[v] = new Bag();
 	}
@@ -92,6 +92,7 @@ public class Graph {
 		return count / 2;
 	}// 计算自环的个数
 
+	@Override
 	public String toString() {
 		String s = V + " vertices, " + E + " edges\n";
 		for (int v = 0; v < V; v++) {

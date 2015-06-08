@@ -28,7 +28,7 @@ public class AppendToFile {
      */
     public static void appendMethodB(String fileName, String content) {
 	try {
-	    // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
+	    // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件,false表示不追加
 	    FileWriter writer = new FileWriter(fileName, true);
 	    writer.write(content);
 	    writer.close();
@@ -38,7 +38,7 @@ public class AppendToFile {
     }
 
     public static void main(String[] args) {
-	String fileName = "C:/temp/newTemp.txt";
+	String fileName = "d:\\.gitignore";
 	String content = "new append!";
 	// 按方法A追加文件
 	AppendToFile.appendMethodA(fileName, content);

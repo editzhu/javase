@@ -186,7 +186,7 @@ public class ReadFromFile {
     }
 
     public static void main(String[] args) {
-	String fileName = "C:/temp/newTemp.txt";
+	String fileName = "d:\\1.txt";
 	ReadFromFile.readFileByBytes(fileName);
 	ReadFromFile.readFileByChars(fileName);
 	ReadFromFile.readFileByLines(fileName);
