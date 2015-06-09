@@ -1,7 +1,9 @@
 package com.jim.util;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 
 public class AppendToFile {
@@ -37,8 +39,21 @@ public class AppendToFile {
 	}
     }
 
+    public static void appendMethodC(String fileName, String content, boolean isappend) {
+	OutputStreamWriter out;
+	try {
+	    out = new OutputStreamWriter(new FileOutputStream(fileName, isappend), "UTF-8");
+	    out.write(content);
+	    out.flush();
+	    out.close();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+
+    }
+
     public static void main(String[] args) {
-	String fileName = "d:\\.gitignore";
+	String fileName = "d:\\1.txt";
 	String content = "new append!";
 	// 按方法A追加文件
 	AppendToFile.appendMethodA(fileName, content);
@@ -46,6 +61,10 @@ public class AppendToFile {
 	// 显示文件内容
 	ReadFromFile.readFileByLines(fileName);
 	// 按方法B追加文件
+	AppendToFile.appendMethodB(fileName, content);
+	AppendToFile.appendMethodB(fileName, "append end. \n");
+	// 显示文件内容
+	ReadFromFile.readFileByLines(fileName); // 按方法B追加文件
 	AppendToFile.appendMethodB(fileName, content);
 	AppendToFile.appendMethodB(fileName, "append end. \n");
 	// 显示文件内容

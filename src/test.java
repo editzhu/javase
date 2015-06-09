@@ -1,9 +1,10 @@
-import java.io.UnsupportedEncodingException;
-
 public class test {
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-	byte[] t = new byte[1024 * 1024 * 400 * 1024 * 1024];
-	System.out.println(t);
+    test1[] t = new test1[2];
+
+    public static void main(String[] args) {
+	test test = new test();
+	test.t[0] = new test1();
+	System.out.println(test.t[0]);
     }
 }
