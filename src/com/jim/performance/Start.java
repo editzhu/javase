@@ -1,22 +1,23 @@
 package com.jim.performance;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class Start implements Runnable {
     private ThreadID var;
-    public static final int ThreadCount = 10;
-    static Map<Integer, Long> m = new HashMap<Integer, Long>();
+    public static final int ThreadCount = 300;
+    static Map<Integer, Long> m = new Hashtable<Integer, Long>();
     private static long start;
 
     Start(ThreadID v) {
 	this.var = v;
+	DBInsert.ini();
     }
 
     public void run() {
 	print("var getThreadID =" + var.getThreadID());
 	Start.m.put(var.getThreadID(), (long) 0);
-	long duration = Request.get();
+	long duration = DBInsert.get();
 	Start.m.put(var.getThreadID(), duration);
     }
 
@@ -56,10 +57,17 @@ public class Start implements Runnable {
 		}
 	    }
 	    System.out.println("finish=" + finish + " count=" + count + " fail=" + fail + " m:" + m);
-	    if (finish >= ThreadCount)
+	    if (finish + fail >= ThreadCount)
 		break;
 	}
-	System.out.println("total:" + (System.currentTimeMillis() - start));
+	long total = (System.currentTimeMillis() - start);
+	System.out.println("total:" + total + "    Handle requests per second:" + ThreadCount * 1000 / total);
+	long dph = 0;
+	for (Map.Entry<Integer, Long> entry : m.entrySet()) {
+	    dph += entry.getValue();
+	}
+	System.out.println("duration per handle:" + dph / m.size());
+	System.out.println("ThreadCount:" + ThreadCount);
     }
 
 }

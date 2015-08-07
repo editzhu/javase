@@ -11,7 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 public class Request {
-    private static final String url = "http://10.0.2.16:8081/solr/select/?q=*%3A*&version=2.2&start=0&rows=10&indent=on";
+    private static final String url = "http://36kr.com";
     private static long duration;
 
     public static long get() {
@@ -57,8 +57,10 @@ public class Request {
 		    // System.out.println("Response content: " +
 		    // EntityUtils.toString(entity));
 		}
-		// System.out.println("------------------------------------");
+		System.out.println("------------------------------------");
 		str = EntityUtils.toString(entity);
+		System.out.println(str);
+		System.out.println("------------------------------------");
 	    } finally {
 		response.close();
 	    }

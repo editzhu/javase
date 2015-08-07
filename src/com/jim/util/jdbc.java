@@ -12,30 +12,40 @@ import java.util.Properties;
 public class jdbc {
     static log log = new log(true);
 
-    public static void ini() throws SQLException, IOException {
+    public static void ini() {
 	// 创建Connection连接
-	Connection conn = getConn1();
+	Connection conn = null;
+	Statement stat = null;
 	// 判断数据库连接是否为空
-	if (conn != null) {
-	    log.p("数据库连接成功！"); // 输出连接信息
-	} else {
-	    log.p("数据库连接失败！"); // 输出连接信息
-	}
+
 	try {
-	    Statement stat = conn.createStatement();
+	    conn = getConn1();
+	    if (conn != null) {
+		log.p("数据库连接成功！"); // 输出连接信息
+	    } else {
+		log.p("数据库连接失败！"); // 输出连接信息
+	    }
+	    stat = conn.createStatement();
 	    String query = "select * from tm_tie";
 	    ResultSet rs = stat.executeQuery(query);
 	    while (rs.next()) {
 		log.p(rs.getString(1));
-		 log.p(rs.getString(2));
-		 log.p(rs.getString(3));
-		 log.p(rs.getString(4));
-		 log.p(rs.getString(5));
+		log.p(rs.getString(2));
+		log.p(rs.getString(3));
+		log.p(rs.getString(4));
+		log.p(rs.getString(5));
 	    }
 	} catch (Exception e) {
 	    e.printStackTrace();
-	}finally{
-	    conn.close();
+	} finally {
+
+	    try {
+		conn.close();
+		stat.close();
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	}
     }
 
@@ -48,6 +58,7 @@ public class jdbc {
 	return DriverManager.getConnection(url, username, password);
 
     }
+
     // 通过配置文件来设置
     public static Connection getConn1() throws SQLException, IOException {
 	Properties props = new Properties();
@@ -65,14 +76,6 @@ public class jdbc {
     }
 
     public static void main(String[] args) {
-	try {
-	    ini();
-	} catch (SQLException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+	ini();
     }
 }
