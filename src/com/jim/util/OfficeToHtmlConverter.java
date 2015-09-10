@@ -1,5 +1,10 @@
 package com.jim.util;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +25,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.poi.hslf.HSLFSlideShow;
+import org.apache.poi.hslf.model.Slide;
+import org.apache.poi.hslf.usermodel.SlideShow;
 import org.apache.poi.hssf.converter.ExcelToHtmlConverter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hwpf.HWPFDocument;
@@ -53,7 +61,6 @@ public class OfficeToHtmlConverter {
 		serializer.setOutputProperty(OutputKeys.INDENT, "yes");
 		serializer.setOutputProperty(OutputKeys.METHOD, "html");
 		serializer.transform(new DOMSource(converter.getDocument()), new StreamResult(writer));
-		System.out.println("begin to writer");
 		out = new FileOutputStream(htmlFile);
 		out.write(writer.toString().getBytes("UTF-8"));
 		out.flush();
@@ -96,7 +103,6 @@ public class OfficeToHtmlConverter {
 		// final String prefix = DateTools.getAllInfo(new Date());//
 		// 设置图片文件的前缀，以防止文件名重复，这里getAllInfo方法返回的是“年月日时分秒毫秒”
 		final String prefix = getContent(20);// 设置图片文件的前缀，以防止文件名重复，这里getAllInfo方法返回的是“年月日时分秒毫秒”
-		System.out.println(prefix);
 		// 将doc文件中的图片重命名
 		converter.setPicturesManager(new PicturesManager() {
 		    public String savePicture(byte[] content, PictureType pictureType, String suggestedName, float widthInches, float heightInches) {
@@ -145,6 +151,35 @@ public class OfficeToHtmlConverter {
 	}
     }
 
+    public static void convertPpt2Html(String pptFilePath, String htmlFilePath) throws IOException {
+	// 仅仅完成在指定目录下输出png图片的功能,几张幻灯片输出几张图片
+	File pptFile = new File(pptFilePath);
+	if (pptFile.exists()) {
+	    File htmlFileParent = new File(htmlFilePath);
+	    if (!htmlFileParent.exists()) {// 如果父目录不存在，则创建父目录
+		htmlFileParent.mkdirs();
+	    }
+	    InputStream input = new FileInputStream(pptFile);
+	    HSLFSlideShow pptDocument = new HSLFSlideShow(input);
+	    SlideShow ppt = new SlideShow(pptDocument);
+	    Dimension pgsize = ppt.getPageSize();
+	    Slide[] slide = ppt.getSlides();
+	    for (int i = 0; i < slide.length; i++) {
+		BufferedImage img = new BufferedImage(pgsize.width, pgsize.height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics = img.createGraphics();
+		// clear the drawing area
+		graphics.setPaint(Color.white);
+		graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height)); // render
+		slide[i].draw(graphics);
+		FileOutputStream out = new FileOutputStream(htmlFileParent.getPath() + "/" + getContent(20) + ".png");
+		javax.imageio.ImageIO.write(img, "png", out);
+		out.close();
+	    }
+
+	}
+
+    }
+
     public static String getContent(int length) {
 	// 产生随机的字符串
 	String base = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -162,12 +197,14 @@ public class OfficeToHtmlConverter {
     public static void main(String[] args) {
 	System.out.println("begin");
 	try {
-	    convertExcel2Html("d:\\1.xls", "d:\\1.html");
-	    // convertDoc2Html("d:\\1.doc", "d:\\1.html");
+	    convertPpt2Html("d:\\3.ppt", "d:\\");
+	    convertExcel2Html("d:\\2.xls", "d:\\2.html");
+	    convertDoc2Html("d:\\1.doc", "d:\\1.html");
 	} catch (IOException | ParserConfigurationException | TransformerException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	System.out.println("over");
+
     }
 }
