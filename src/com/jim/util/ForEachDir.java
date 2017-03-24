@@ -15,7 +15,7 @@ public class ForEachDir {
     private static Map<Integer, File> mapFileName = new HashMap<Integer, File>();
 
     public static void main(String[] args) {
-	File path = new File("D:\\test");
+	File path = new File("D:\\CKMS产品部\\数据和资源\\easypr-resources\\train\\ann");
 	id++;
 	mapFileId.put(id, 0);
 	mapFileName.put(id, path);
